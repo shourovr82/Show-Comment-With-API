@@ -8,7 +8,7 @@ const loadComments = () => {
 const displayComments = (comments) => {
   const commentContainer = document.getElementById('comments-container');
   const srv = comments.forEach(data => {
-    console.log(data)
+    // console.log(data)
     const commentDiv = document.createElement('div');
     commentDiv.classList.add('row');
     commentDiv.classList.add('g-3');
@@ -23,21 +23,49 @@ const displayComments = (comments) => {
               <h5 class="card-title">Title : ${data.name}</h5>
               <p class="card-text">${data.body}
               </p>
+              <button onclick ="loadCommentDetail(${data.id})"  class ="btn  text-white btn-success border py-1">Show Details</button>
             </div>
           </div>
         </div>
     `;
     commentContainer.appendChild(commentDiv)
-
-
-
-
   });
-
-
-
 }
 
+
+const loadCommentDetail = (id) => {
+  fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
+    .then(res => res.json())
+    .then(data => displayCommentDetails(data))
+}
+
+const displayCommentDetails = (data) => {
+  const commentDetailContainer = document.getElementById('comment-detail');
+  console.log(data)
+  commentDetailContainer.innerHTML = ''
+  const detailDiv = document.createElement('div');
+  detailDiv.classList.add('container')
+  detailDiv.classList.add('w-50')
+  detailDiv.innerHTML = `
+<div class="alert alert-success " role="alert">
+  <h5 class="alert-heading">Post Title : ${data.title}</h5>
+  <p>Post : ${data.body}</p>
+  <hr>
+  <div class="d-flex justify-content-between align-items-center"> 
+      <button onclick ="hideDetails(this)"  class ="btn  text-white btn-success border py-1">Hide Details</button>
+      <p>Post Id : ${data.id}</p>
+  </div>
+
+</div>
+  `;
+
+  commentDetailContainer.appendChild(detailDiv)
+}
+
+const hideDetails = () => {
+  const detailContainer = document.getElementById('comment-detail');
+  detailContainer.innerHTML = '';
+}
 
 
 
