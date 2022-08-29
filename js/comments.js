@@ -2,7 +2,7 @@ const loadComments = () => {
   const url = 'https://jsonplaceholder.typicode.com/comments';
   fetch(url)
     .then(res => res.json())
-    .then(data => displayComments(data))
+    .then(data => displayComments(data.slice(0, 100)));
 }
 
 const displayComments = (comments) => {
@@ -21,9 +21,8 @@ const displayComments = (comments) => {
             </div>
             <div class="card-body">
               <h5 class="card-title">Title : ${data.name}</h5>
-              <p class="card-text">${data.body}
-              </p>
-              <button onclick ="loadCommentDetail(${data.id})"  class ="btn  text-white btn-success border py-1">Show Details</button>
+              <p class="card-text">${data.body}</p>
+              <button onclick ="loadCommentDetail(${data.id ? data.id : "not available"})"  class ="btn  text-white btn-success border py-1">Show Details</button>
             </div>
           </div>
         </div>
@@ -41,23 +40,28 @@ const loadCommentDetail = (id) => {
 
 const displayCommentDetails = (data) => {
   const commentDetailContainer = document.getElementById('comment-detail');
-  console.log(data)
   commentDetailContainer.innerHTML = ''
   const detailDiv = document.createElement('div');
   detailDiv.classList.add('container')
   detailDiv.classList.add('w-50')
+
+
   detailDiv.innerHTML = `
 <div class="alert alert-success " role="alert">
   <h5 class="alert-heading">Post Title : ${data.title}</h5>
   <p>Post : ${data.body}</p>
   <hr>
   <div class="d-flex justify-content-between align-items-center"> 
-      <button onclick ="hideDetails(this)"  class ="btn  text-white btn-success border py-1">Hide Details</button>
+      <button onclick ="hideDetails(${data.id ? data.id : "not available"} )"  class ="btn  text-white btn-success border py-1">Hide Details</button>
       <p>Post Id : ${data.id}</p>
   </div>
 
 </div>
   `;
+
+  {/* <div onclick="loadAuthorDetail('${book.author_key ? book.author_key[0] : " n /a"}')" class="card h-100 text-center" > */ }
+
+
 
   commentDetailContainer.appendChild(detailDiv)
 }
